@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-peripheral-heading" data-cy="PeripheralCreateUpdateHeading">Create or edit a Peripheral</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_uid">Uid</label>
+          <input type="number" class="form-control" name="uid" id="field_uid" data-cy="uid" formControlName="uid" />
+          <div *ngIf="editForm.get('uid')!.invalid && (editForm.get('uid')!.dirty || editForm.get('uid')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('uid')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('uid')?.errors?.number"> This field should be a number. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_vendor">Vendor</label>
+          <input type="text" class="form-control" name="vendor" id="field_vendor" data-cy="vendor" formControlName="vendor" />
+          <div *ngIf="editForm.get('vendor')!.invalid && (editForm.get('vendor')!.dirty || editForm.get('vendor')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('vendor')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_date_created">Date Created</label>
+          <div class="input-group">
+            <input
+              id="field_date_created"
+              data-cy="date_created"
+              type="text"
+              class="form-control"
+              name="date_created"
+              ngbDatepicker
+              #date_createdDp="ngbDatepicker"
+              formControlName="date_created"
+            />
+            <button type="button" class="btn btn-secondary" (click)="date_createdDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          <div
+            *ngIf="editForm.get('date_created')!.invalid && (editForm.get('date_created')!.dirty || editForm.get('date_created')!.touched)"
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('date_created')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_status">Status</label>
+          <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let status of statusValues" [value]="status">status</option>
+          </select>
+          <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('status')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_gateway">Gateway</label>
+          <select
+            class="form-control"
+            id="field_gateway"
+            data-cy="gateway"
+            name="gateway"
+            formControlName="gateway"
+            [compareWith]="compareGateway"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="gatewayOption" *ngFor="let gatewayOption of gatewaysSharedCollection">
+              {{ gatewayOption.serial_number }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

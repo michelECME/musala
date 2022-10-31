@@ -1,0 +1,77 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-gateway-heading" data-cy="GatewayCreateUpdateHeading">Create or edit a Gateway</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_serial_number">Serial Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="serial_number"
+            id="field_serial_number"
+            data-cy="serial_number"
+            formControlName="serial_number"
+          />
+          <div
+            *ngIf="
+              editForm.get('serial_number')!.invalid && (editForm.get('serial_number')!.dirty || editForm.get('serial_number')!.touched)
+            "
+          >
+            <small class="form-text text-danger" *ngIf="editForm.get('serial_number')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_name">Name</label>
+          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
+          <div *ngIf="editForm.get('name')!.invalid && (editForm.get('name')!.dirty || editForm.get('name')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('name')?.errors?.required"> This field is required. </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_ip_address">Ip Address</label>
+          <input
+            type="text"
+            class="form-control"
+            name="ip_address"
+            id="field_ip_address"
+            data-cy="ip_address"
+            formControlName="ip_address"
+          />
+          <div *ngIf="editForm.get('ip_address')!.invalid && (editForm.get('ip_address')!.dirty || editForm.get('ip_address')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('ip_address')?.errors?.required"> This field is required. </small>
+            <small class="form-text text-danger" *ngIf="editForm.get('ip_address')?.errors?.pattern">
+              This field should follow pattern for Ip Address.
+            </small>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

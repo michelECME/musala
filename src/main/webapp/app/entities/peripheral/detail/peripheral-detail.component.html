@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="peripheral">
+      <h2 data-cy="peripheralDetailsHeading"><span>Peripheral</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ peripheral.id }}</span>
+        </dd>
+        <dt><span>Uid</span></dt>
+        <dd>
+          <span>{{ peripheral.uid }}</span>
+        </dd>
+        <dt><span>Vendor</span></dt>
+        <dd>
+          <span>{{ peripheral.vendor }}</span>
+        </dd>
+        <dt><span>Date Created</span></dt>
+        <dd>
+          <span>{{ peripheral.date_created | formatMediumDate }}</span>
+        </dd>
+        <dt><span>Status</span></dt>
+        <dd>
+          <span>{{ peripheral.status }}</span>
+        </dd>
+        <dt><span>Gateway</span></dt>
+        <dd>
+          <div *ngIf="peripheral.gateway">
+            <a [routerLink]="['/gateway', peripheral.gateway.id, 'view']">{{ peripheral.gateway.serial_number }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/peripheral', peripheral.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

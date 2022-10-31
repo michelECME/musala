@@ -1,0 +1,40 @@
+{
+  "changelogDate": "20221031174650",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "vendor",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "date_created",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "Status",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "OFFICE,ONLINE"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Peripheral",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "serial_number",
+      "otherEntityName": "gateway",
+      "relationshipName": "gateway",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceClass"
+}

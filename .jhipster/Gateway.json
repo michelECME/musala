@@ -1,0 +1,28 @@
+{
+  "changelogDate": "20221031174249",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "serial_number",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ip_address",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "afdadfadsf"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Gateway",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceClass"
+}
