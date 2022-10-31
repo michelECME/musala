@@ -54,9 +54,10 @@
 
         <div class="row mb-3">
           <label class="form-label" for="field_status">Status</label>
+
           <select class="form-control" name="status" formControlName="status" id="field_status" data-cy="status">
-            <option [ngValue]="null"></option>
-            <option *ngFor="let status of statusValues" [value]="status">status</option>
+            <option value="value1" selected>Online</option>
+            <option value="value2">Offline</option>
           </select>
           <div *ngIf="editForm.get('status')!.invalid && (editForm.get('status')!.dirty || editForm.get('status')!.touched)">
             <small class="form-text text-danger" *ngIf="editForm.get('status')?.errors?.required"> This field is required. </small>

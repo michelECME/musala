@@ -69,6 +69,9 @@ public class PeripheralResource {
         if (peripheralDTO.getId() != null) {
             throw new BadRequestAlertException("A new peripheral cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (findAllByGatewayId(peripheralDTO.getGateway().getId()).getBody().size() == 10) {
+            throw new BadRequestAlertException("There is to many peripherals in this gateway ", ENTITY_NAME, "tomanyperipherals");
+        }
         PeripheralDTO result = peripheralService.save(peripheralDTO);
         return ResponseEntity
             .created(new URI("/api/peripherals/" + result.getId()))
@@ -101,6 +104,9 @@ public class PeripheralResource {
 
         if (!peripheralRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        if (findAllByGatewayId(peripheralDTO.getGateway().getId()).getBody().size() == 10) {
+            throw new BadRequestAlertException("There is to many peripherals in this gateway ", ENTITY_NAME, "tomanyperipherals");
         }
 
         PeripheralDTO result = peripheralService.update(peripheralDTO);
@@ -136,6 +142,9 @@ public class PeripheralResource {
 
         if (!peripheralRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        if (findAllByGatewayId(peripheralDTO.getGateway().getId()).getBody().size() == 10) {
+            throw new BadRequestAlertException("There is to many peripherals in this gateway ", ENTITY_NAME, "tomanyperipherals");
         }
 
         Optional<PeripheralDTO> result = peripheralService.partialUpdate(peripheralDTO);

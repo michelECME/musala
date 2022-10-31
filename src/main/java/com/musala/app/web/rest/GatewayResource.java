@@ -93,7 +93,7 @@ public class GatewayResource {
         if (gatewayDTO.getId() != null) {
             throw new BadRequestAlertException("A new gateway cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (findAllPeripheralsByGatewayId(gatewayDTO.getId()).getBody().size() <= 10) {
+        if (findAllPeripheralsByGatewayId(gatewayDTO.getId()).getBody().size() < 10) {
             GatewayDTO result = gatewayService.save(gatewayDTO);
             return ResponseEntity
                 .created(new URI("/api/gateways/" + result.getId()))
