@@ -4,6 +4,7 @@ import com.musala.app.domain.Gateway;
 import com.musala.app.repository.GatewayRepository;
 import com.musala.app.service.dto.GatewayDTO;
 import com.musala.app.service.mapper.GatewayMapper;
+import com.musala.app.service.mapper.PeripheralMapper;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,8 +3,10 @@ package com.musala.app.web.rest;
 import com.musala.app.repository.GatewayRepository;
 import com.musala.app.service.GatewayQueryService;
 import com.musala.app.service.GatewayService;
+import com.musala.app.service.PeripheralService;
 import com.musala.app.service.criteria.GatewayCriteria;
 import com.musala.app.service.dto.GatewayDTO;
+import com.musala.app.service.dto.PeripheralDTO;
 import com.musala.app.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,14 +45,40 @@ public class GatewayResource {
     private final GatewayService gatewayService;
 
     private final GatewayRepository gatewayRepository;
-
+    private final PeripheralService peripheralService;
     private final GatewayQueryService gatewayQueryService;
 
-    public GatewayResource(GatewayService gatewayService, GatewayRepository gatewayRepository, GatewayQueryService gatewayQueryService) {
+    public GatewayResource(
+        GatewayService gatewayService,
+        GatewayRepository gatewayRepository,
+        GatewayQueryService gatewayQueryService,
+        PeripheralService peripheralService
+    ) {
         this.gatewayService = gatewayService;
         this.gatewayRepository = gatewayRepository;
         this.gatewayQueryService = gatewayQueryService;
+        this.peripheralService = peripheralService;
     }
+
+    /**
+     * {@code GET  /gateways/:id/peripherals} : get the "id" Gateways.
+     *
+     * @param id the id of the peripheralDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peripheralDTO}.
+     */
+    @GetMapping("/gateway/{id}/peripherals")
+    public ResponseEntity<List<PeripheralDTO>> findAllPeripheralsByGatewayId(@PathVariable Long id) {
+        log.debug("REST request to get Peripheral : {}", id);
+
+        return ResponseEntity.ok().body(peripheralService.findAllByGatewayId(id));
+    }
+
+    /**
+     * {@code GET  /gateways/:id/peripherals} : get the "id" Gateways.
+     *
+     * @param id the id of the peripheralDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peripheralDTO}.
+     */
 
     /**
      * {@code POST  /gateways} : Create a new gateway.
@@ -65,11 +93,15 @@ public class GatewayResource {
         if (gatewayDTO.getId() != null) {
             throw new BadRequestAlertException("A new gateway cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        GatewayDTO result = gatewayService.save(gatewayDTO);
-        return ResponseEntity
-            .created(new URI("/api/gateways/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        if (findAllPeripheralsByGatewayId(gatewayDTO.getId()).getBody().size() <= 10) {
+            GatewayDTO result = gatewayService.save(gatewayDTO);
+            return ResponseEntity
+                .created(new URI("/api/gateways/" + result.getId()))
+                .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+                .body(result);
+        } else {
+            throw new BadRequestAlertException("There is to many peripherals in this gateway ", ENTITY_NAME, "tomanyperipherals");
+        }
     }
 
     /**
@@ -97,6 +129,9 @@ public class GatewayResource {
 
         if (!gatewayRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+        if (findAllPeripheralsByGatewayId(gatewayDTO.getId()).getBody().size() == 10) {
+            throw new BadRequestAlertException("There is to many peripherals in this gateway ", ENTITY_NAME, "tomanyperipherals");
         }
 
         GatewayDTO result = gatewayService.update(gatewayDTO);
@@ -130,8 +165,8 @@ public class GatewayResource {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
-        if (!gatewayRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        if (findAllPeripheralsByGatewayId(gatewayDTO.getId()).getBody().size() == 10) {
+            throw new BadRequestAlertException("There is to many peripherals in this gateway ", ENTITY_NAME, "tomanyperipherals");
         }
 
         Optional<GatewayDTO> result = gatewayService.partialUpdate(gatewayDTO);

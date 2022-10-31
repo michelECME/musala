@@ -193,7 +193,7 @@ public class PeripheralResource {
      * {@code GET  /gateways/:id/peripherals} : get the "id" Gateways.
      *
      * @param id the id of the peripheralDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peripheralDTO, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the peripheralDTO}.
      */
     @GetMapping("/gateways/{id}/peripherals")
     public ResponseEntity<List<PeripheralDTO>> findAllByGatewayId(@PathVariable Long id) {
